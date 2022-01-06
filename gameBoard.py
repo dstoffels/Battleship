@@ -1,4 +1,5 @@
 import string
+from helpers import clear_console
 
 from ship import Ship
 from constant import GRID, EMPTY_CELL
@@ -13,6 +14,7 @@ class GameBoard:
     self._build_grid(False)
 
   def display_for_player(self):
+    clear_console()
     self._build_grid(True)
 
   def _build_grid(self, for_player):
@@ -46,12 +48,10 @@ class GameBoard:
     return EMPTY_CELL
 
   def try_place_ship(self, new_ship: Ship, coords, vertical):
-    coords = self._convert_coords(coords)
     if self._ship_within_grid(new_ship, coords, vertical) and self._ship_not_overlapping(new_ship,coords,vertical):
-      self.display_for_player()
-      print(f'{new_ship.name} placed!')
+      return True
     else:
-      print(f'{new_ship.name} does not fit here.')
+      return False
 
   def _ship_within_grid(self, new_ship: Ship, coords, vertical):
     end_row = coords[0] + new_ship.length - 1

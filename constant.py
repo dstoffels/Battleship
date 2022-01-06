@@ -24,3 +24,18 @@ SHIP_HORZ = {
   HULL: ' ═',
   STERN: ' >'
 }
+
+MAIN_MENU = '''1) Solo Game
+2) Hotseat Game (two players)
+3) Quit
+
+Choose an option: '''
+
+AI_NAMES = [
+  "Cap'm Jack Sparrah",
+  "Admiral Ackbar",
+  "The East India Trading Co.",
+  "Bob",
+  "James Bugress",
+  "Ariana Grande"
+]
