@@ -18,13 +18,13 @@ class AI(Player):
       self.name = AI_NAMES[i]
   
   def place_ships(self):
-    for ship in self.ships:
-      successfully_placed = False
-      while not successfully_placed:
-        coords = self.rand_cell()
-        vertical = self.rand_bool()
-        successfully_placed = self.board.try_place_ship(ship, coords, vertical)
+    self._place_ships_randomly()
+    self._display_place_ship_progress()
+    
+    self.board.display_for_player()
+    input('press return')
 
+  def _display_place_ship_progress(self):
     i = 0
     msg = f'{self.name} is placing ships.'
     while i < 5:
@@ -34,14 +34,3 @@ class AI(Player):
       time.sleep(pause)
       msg += '.'
       i += 1
-    
-    self.board.display_for_player()
-    input('press return')
-
-  def rand_cell(self):
-    row = random.randint(1, GRID)
-    col = random.randint(1, GRID)
-    return (row, col)
-
-  def rand_bool(self):
-    return random.randint(0, 1)

@@ -4,6 +4,8 @@ from ai import AI
 from helpers import clear_console, validate_int_input
 from constant import MAIN_MENU
 
+
+
 def run_solo_game():
   player1 = Player()
   player2 = AI()

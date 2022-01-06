@@ -31,6 +31,21 @@ MAIN_MENU = '''1) Solo Game
 
 Choose an option: '''
 
+BOARD_SETUP_MENU = '''
+1) Place ships manually
+2) Place ships randomly
+3) Move a ship
+4) Clear ships from the board
+5) TO BATTLE!
+6) Return to main menu
+
+Choose an option: '''
+
+MANUAL_PLACE_MENU = '''1) Flip Orientation
+2) Select coordinates
+3) Confirm placement
+'''
+
 AI_NAMES = [
   "Cap'm Jack Sparrah",
   "Admiral Ackbar",

@@ -48,6 +48,7 @@ class GameBoard:
     return EMPTY_CELL
 
   def try_place_ship(self, new_ship: Ship, coords, vertical):
+    new_ship.remove()
     if self._ship_within_grid(new_ship, coords, vertical) and self._ship_not_overlapping(new_ship,coords,vertical):
       return True
     else:
@@ -74,7 +75,7 @@ class GameBoard:
         return False
     return True
 
-  def _place_ship(self, new_ship, coords, vertical):
+  def _place_ship(self, new_ship: Ship, coords, vertical):
     new_ship.place(coords, vertical)
     self.ships.append(new_ship)
 
@@ -82,9 +83,3 @@ class GameBoard:
     self.ships.remove(ship)
     ship.remove()
   
-  def _convert_coords(self, input_coords):
-    letter: str = input_coords[0]
-    row = string.ascii_lowercase.index(letter)
-    row = int(row) + 1
-    col = int(input_coords[1])
-    return (row, col)
