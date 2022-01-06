@@ -5,21 +5,18 @@ from constant import GRID, EMPTY_CELL
 
 class GameBoard:
   def __init__(self):
-    self.cells = {}
     self.hits = []
     self.misses = []   
-    self.ships: list[Ship] = [Ship('Destroyer', 4)]
-
-    self.ships[0].place_ship((1,1), True)
-    self.display_for_player()
+    self.ships: list[Ship] = []
 
   def display_for_opponent(self):
-    self._build_grid(self.build_cell, False)
+    self._build_grid(False)
 
   def display_for_player(self):
-    self._build_grid(self.build_cell, True)
+    self._build_grid(True)
 
-  def _build_grid(self, build_cell, for_player):
+
+  def _build_grid(self, for_player):
     row = 0
     col = 0
 
@@ -31,7 +28,7 @@ class GameBoard:
           if col < 10: line += f' {col} '
           else: line += f' {col}'
         elif col == 0: line += f' {string.ascii_uppercase[row - 1]}'
-        else: line += f' {build_cell((row, col), for_player)}'
+        else: line += f' {self.build_cell((row, col), for_player)}'
         col += 1
       row += 1
       col = 0
@@ -43,25 +40,52 @@ class GameBoard:
       if cell == hit: return ' X'
     if for_player:
       for ship in self.ships:
-        return ship.get_ship_coords(cell)
+        new_cell = ship.get_coords(cell)
+        if new_cell != EMPTY_CELL: return new_cell 
     for miss in self.misses:
       if cell == miss: return ' -'
     return EMPTY_CELL
 
-  def validate_ship_placement(self, ship: Ship):
-    pass
-    
+  def try_place_ship(self, new_ship: Ship, coords, vertical):
+    coords = self._convert_coords(coords)
+    if self._ship_within_grid(new_ship, coords, vertical) and self._ship_not_overlapping(new_ship,coords,vertical):
+      self.display_for_player()
+      print(f'{new_ship.name} placed!')
+    else:
+      print(f'{new_ship.name} does not fit here.')
 
+  def _ship_within_grid(self, new_ship: Ship, coords, vertical):
+    end_row = coords[0] + new_ship.length - 1
+    end_col = coords[1] + new_ship.length - 1
 
+    if vertical:
+      if end_row > GRID: return False
+    else:
+      if end_col > GRID: return False
+    return True
+  
+  def _ship_not_overlapping(self, new_ship: Ship, coords, vertical):
+    self._place_ship(new_ship,coords,vertical)
 
+    for ship in self.ships:
+      if ship == new_ship: 
+        continue
+      elif ship.compare_coords(new_ship):
+        self._remove_ship(new_ship)
+        return False
+    return True
 
-    # r = 0
-    # c = 0
-    # while r < GRID:
-    #   row = string.ascii_lowercase[r]
-    #   while c < GRID:
-    #     col = c + 1
-    #     c += 1
-    #     self.cells.update({str(row)+str(col): (r+1,c)})
-    #   c = 0
-    #   r += 1
+  def _place_ship(self, new_ship, coords, vertical):
+    new_ship.place(coords, vertical)
+    self.ships.append(new_ship)
+
+  def _remove_ship(self, ship: Ship):
+    self.ships.remove(ship)
+    ship.remove()
+  
+  def _convert_coords(self, input_coords):
+    letter: str = input_coords[0]
+    row = string.ascii_lowercase.index(letter)
+    row = int(row) + 1
+    col = int(input_coords[1])
+    return (row, col)
