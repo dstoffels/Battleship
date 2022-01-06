@@ -1,8 +1,7 @@
 import string
 
-from ship import SHIP_NAMES, Ship
-
-GRID = 10
+from ship import Ship
+from constant import GRID, EMPTY_CELL
 
 class GameBoard:
   def __init__(self):
@@ -47,7 +46,7 @@ class GameBoard:
         return ship.get_ship_coords(cell)
     for miss in self.misses:
       if cell == miss: return ' -'
-    return '⬜'
+    return EMPTY_CELL
 
   def validate_ship_placement(self, ship: Ship):
     pass
