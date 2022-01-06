@@ -15,7 +15,6 @@ class GameBoard:
   def display_for_player(self):
     self._build_grid(True)
 
-
   def _build_grid(self, for_player):
     row = 0
     col = 0

@@ -5,3 +5,6 @@ class Player:
   def __init__(self) -> None:
       self.board = GameBoard()
       self.ships = load_ships()
+  
+  def place_ships(self):
+    pass

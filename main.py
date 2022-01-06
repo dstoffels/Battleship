@@ -1,13 +1,21 @@
-from gameBoard import GameBoard
-from ship import Ship
+from helpers import validate_int_input
 
 
-gb = GameBoard()
+MAIN_MENU = '''
+1) Single Player Game
+2) Two Player Game
+3) Quit
 
-destroyer = Ship('Destroyer', 2)
-carrier = Ship('Carrier', 5)
+Choose an option: '''
 
-# gb.try_place_ship(carrier, (1,10), False)
-gb.try_place_ship(carrier, 'a7', True)
-# gb.try_place_ship(destroyer, (1,1), True)
-gb.try_place_ship(destroyer, 'i1', True)
+def run_main_menu():
+  prompt = MAIN_MENU
+  while True:
+    userInput = validate_int_input(prompt)
+
+    match userInput:
+      case 1: pass
+      case 2: pass
+      case 3: exit()
+      case _: prompt = 'Choose an option between 1-3: '
+
