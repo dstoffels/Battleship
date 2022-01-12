@@ -1,45 +1,40 @@
 import random
 import string
 
-from constant import BOARD_SETUP_MENU, GRID, MANUAL_PLACE_MENU
+from constant import SET_BOARD_MENU, GRID, MANUAL_PLACE_MENU
 from gameBoard import GameBoard
 from helpers import clear_console, validate_int_input
-from ship import Ship, load_ships
+from ship import Ship, init_ships
+
+# FIXME: refactor for parent Player class -> human, ai subclasses
 
 class Player:
   def __init__(self):
     self.name = ''
     self.board = GameBoard()
-    self.ships = load_ships()
+    self.ships = init_ships()
 
   def setup(self, player_num, player1_name):
     self.set_name(player_num, player1_name)
     self.place_ships()
 
-  def set_name(self, player_num, player1_name):
-    prompt = f'Enter a name for player {player_num}: '
-    self.name = player1_name
-    while self.name == player1_name:
-      name = input(prompt)
-      if name == '': continue
-      elif str.lower(name) == str.lower(player1_name): prompt = 'Player names cannot be the same! Enter a different name: '
-      else: self.name = name
+  def set_name(self): pass
   
   def place_ships(self):
-    if self._run_board_setup_menu(): print('game on')
+    if self._run_board_setup(): print('game on')
     return
 
-  def _run_board_setup_menu(self):
-    self.board.display_for_player()
-
+  def _run_board_setup(self):
+    self.board.display_for_self()
+    # FIXME: move to Set_Board class
     while True:
-      userInput = validate_int_input(BOARD_SETUP_MENU)
+      userInput = validate_int_input(SET_BOARD_MENU)
 
       match userInput:
         case 1: self._place_ships_manually()
         case 2:
           self._place_ships_randomly()
-          self.board.display_for_player()
+          self.board.display_for_self()
         case 3: pass # move ship (select ship menu)
         case 4: pass # clear board (need method)
         case 5: return True
@@ -49,6 +44,7 @@ class Player:
     for ship in self.ships:
       self._run_manual_menu(ship)
 
+  # FIXME: move to place_ships_menu class
   def _run_manual_menu(self, ship: Ship):
     prompt = MANUAL_PLACE_MENU
     successfully_placed = False
@@ -58,21 +54,21 @@ class Player:
     while not successfully_placed:
       clear_console()
       orientation = 'Vertical' if vertical else 'Horizontal'
-      self.board.display_for_player()
+      self.board.display_for_self()
       print(f'Placing {ship.name}')
 
       userInput = validate_int_input(prompt)
       match userInput:
-        case 1:
-          vertical = not vertical
-          if not self.board.try_place_ship(ship,coords,vertical):
-            print('Invalid placement!: ')
-            vertical = True
-        case 2: 
+        case 1: 
           coords = (10, 10)
           while not self.board.try_place_ship(ship,coords,vertical):
             coords = self.get_coords_from_user()
             print('Invalid placement!: ')
+        case 2:
+          vertical = not vertical
+          if not self.board.try_place_ship(ship,coords,vertical):
+            print('Invalid placement!: ')
+            vertical = True
         case 3:
           if self.board.try_place_ship(ship, coords, vertical):
             successfully_placed = True

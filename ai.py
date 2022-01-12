@@ -21,7 +21,7 @@ class AI(Player):
     self._place_ships_randomly()
     self._display_place_ship_progress()
     
-    self.board.display_for_player()
+    self.board.display_for_self()
     input('press return')
 
   def _display_place_ship_progress(self):
@@ -29,7 +29,7 @@ class AI(Player):
     msg = f'{self.name} is placing ships.'
     while i < 5:
       clear_console()
-      pause = random.uniform(0.5, 2)
+      pause = random.uniform(0.5, 1)
       print(msg)
       time.sleep(pause)
       msg += '.'

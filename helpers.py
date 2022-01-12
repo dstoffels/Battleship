@@ -1,4 +1,5 @@
 import os
+import string
 
 def clear_console():
     os.system('cls')
@@ -13,3 +14,6 @@ def validate_int_input(prompt):
 
 def index_len(list):
     return len(list) - 1
+
+def index_uppercase(num):
+    return string.ascii_uppercase[num - 1]

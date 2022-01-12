@@ -1,23 +1,42 @@
 import string
-from helpers import clear_console
+from helpers import clear_console, index_uppercase
 
 from ship import Ship
 from constant import GRID, EMPTY_CELL
 
-class GameBoard:
+class GameBoard(dict):
   def __init__(self):
-    self.hits = []
-    self.misses = []   
+    super().__init__(self)
+    self.build_cells()
     self.ships: list[Ship] = []
 
+  def build_cells(self):
+    for row in range(GRID):
+      for col in range(GRID):
+        self.update({(row,col), EMPTY_CELL})
+
+  def display(self, for_self):
+    for row in range(0,GRID):
+      line = ''
+      for col in range(0,GRID):
+        if not row and not col: line += '  '
+        elif not col: line += index_uppercase(row)
+        elif not row: line += f' {col} ' if col < 10 else f' {col}'
+        else: line += f' {self[(row,col)]}' if for_self else self.hide_cell()
+      print(line)
+
+  def hide_cell(self, coords):
+    pass
+
+
   def display_for_opponent(self):
-    self._build_grid(False)
+    self._display_grid(False)
 
-  def display_for_player(self):
+  def display_for_self(self):
     clear_console()
-    self._build_grid(True)
+    self._display_grid(True)
 
-  def _build_grid(self, for_player):
+  def _display_grid(self, for_player):
     row = 0
     col = 0
 

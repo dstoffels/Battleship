@@ -1,4 +1,3 @@
-from os import name
 from constant import BOW, EMPTY_CELL, HULL, SHIP_HORZ, SHIP_NAMES, SHIP_VERT, STERN
 
 class Ship:
@@ -36,7 +35,7 @@ class Ship:
       if key == cell: return val
     return EMPTY_CELL
 
-def load_ships():
+def init_ships():
   ships = []
   for name, length in SHIP_NAMES.items():
     ship = Ship(name, length)

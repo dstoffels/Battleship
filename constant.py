@@ -25,13 +25,13 @@ SHIP_HORZ = {
   STERN: ' >'
 }
 
-MAIN_MENU = '''1) Solo Game
+MAIN_MENU_PROMPT = '''1) Solo Game
 2) Hotseat Game (two players)
 3) Quit
 
 Choose an option: '''
 
-BOARD_SETUP_MENU = '''
+SET_BOARD_MENU = '''
 1) Place ships manually
 2) Place ships randomly
 3) Move a ship
@@ -41,8 +41,8 @@ BOARD_SETUP_MENU = '''
 
 Choose an option: '''
 
-MANUAL_PLACE_MENU = '''1) Flip Orientation
-2) Select coordinates
+MANUAL_PLACE_MENU = '''1) Select coordinates
+2) Flip Orientation
 3) Confirm placement
 '''
 
