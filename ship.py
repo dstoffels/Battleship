@@ -1,10 +1,13 @@
 from constant import BOW, EMPTY_CELL, HULL, SHIP_HORZ, SHIP_NAMES, SHIP_VERT, STERN
 
+
+#FULL REFACTOR: move most logic to GameBoard
 class Ship:
   def __init__(self, name, length) -> None:
     self.name = name
     self.length = length
     self.coords = {} # key: coordinates tuple (1,4), value: what to display in cell ^, v, <, >, =, ‖
+    #FIXME: remove coords, ship does not need to know where it is, only gameboard
   
   def place(self, coords, vertical=False): #bow of ship placed at coords
     row = coords[0]

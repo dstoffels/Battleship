@@ -1,5 +1,7 @@
 GRID = 10
 EMPTY_CELL = '⬜'
+MISS = ' -'
+HIT = ' X'
 
 SHIP_NAMES = {
   'Destroyer': 2,

@@ -1,70 +1,47 @@
 import string
+from cell import Cell
 from helpers import clear_console, index_uppercase
 
 from ship import Ship
 from constant import GRID, EMPTY_CELL
 
-class GameBoard(dict):
+# specialized dictionary with coordinate tuple keys and cell object values
+class GameBoard(dict[(int,int), Cell]):
   def __init__(self):
     super().__init__(self)
     self.build_cells()
     self.ships: list[Ship] = []
 
   def build_cells(self):
-    for row in range(GRID):
-      for col in range(GRID):
-        self.update({(row,col), EMPTY_CELL})
+    for row in range(GRID + 1):
+      for col in range(GRID + 1):
+        self[(row, col)] = Cell()
 
   def display(self, for_self):
-    for row in range(0,GRID):
+    for row in range(0,GRID + 1):
       line = ''
-      for col in range(0,GRID):
-        if not row and not col: line += '  '
-        elif not col: line += index_uppercase(row)
-        elif not row: line += f' {col} ' if col < 10 else f' {col}'
-        else: line += f' {self[(row,col)]}' if for_self else self.hide_cell()
+      for col in range(0,GRID + 1):
+        line += self._build_header_row(row,col)
+        line += self._build_header_col(row,col)
+        line += self._get_cell((row, col), for_self)
       print(line)
 
-  def hide_cell(self, coords):
-    pass
+  def _get_cell(self, coords, for_self):
+    row, col = coords
+    if row and col: return f' {self[(row,col)].get(for_self)}'
+    return ''
+  
+  def _build_header_row(self, row, col):
+    if not row and not col: return '  '
+    if not row: return f' {col} ' if col < 10 else f'{col} '
+    return ''
+
+  def _build_header_col(self, row, col):
+    if not col and row: return index_uppercase(row)
+    return ''
 
 
-  def display_for_opponent(self):
-    self._display_grid(False)
-
-  def display_for_self(self):
-    clear_console()
-    self._display_grid(True)
-
-  def _display_grid(self, for_player):
-    row = 0
-    col = 0
-
-    line = ''
-    while row <= GRID:
-      while col <= GRID:
-        if row == 0 and col == 0: line += '  '
-        elif row == 0: 
-          if col < 10: line += f' {col} '
-          else: line += f' {col}'
-        elif col == 0: line += f' {string.ascii_uppercase[row - 1]}'
-        else: line += f' {self.build_cell((row, col), for_player)}'
-        col += 1
-      row += 1
-      col = 0
-      print(line)
-      line = ''
-
-  def build_cell(self, cell, for_player):
-    for hit in self.hits:
-      if cell == hit: return ' X'
-    if for_player:
-      for ship in self.ships:
-        new_cell = ship.get_coords(cell)
-        if new_cell != EMPTY_CELL: return new_cell 
-    for miss in self.misses:
-      if cell == miss: return ' -'
-    return EMPTY_CELL
+########### OLD STUFF #############  
 
   def try_place_ship(self, new_ship: Ship, coords, vertical):
     new_ship.remove()
@@ -87,11 +64,10 @@ class GameBoard(dict):
     self._place_ship(new_ship,coords,vertical)
 
     for ship in self.ships:
-      if ship == new_ship: 
-        continue
-      elif ship.compare_coords(new_ship):
-        self._remove_ship(new_ship)
-        return False
+      if ship != new_ship: 
+        if ship.compare_coords(new_ship):
+          self._remove_ship(new_ship)
+          return False
     return True
 
   def _place_ship(self, new_ship: Ship, coords, vertical):
@@ -101,4 +77,14 @@ class GameBoard(dict):
   def _remove_ship(self, ship: Ship):
     self.ships.remove(ship)
     ship.remove()
-  
+
+
+gb = GameBoard()
+
+gb[1,1].set_miss()
+gb[10,7].set_miss()
+gb[4,4].set_hit()
+gb[1,1].set_hit()
+gb[1,2].set_miss()
+
+gb.display(True)
