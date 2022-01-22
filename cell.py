@@ -7,7 +7,7 @@ class Cell:
   def get(self, for_self):
     # return EMPTY_CELL
     if for_self: 
-       self.contents
+       return self.contents
     else: 
       return self.contents if self._is_hit_or_miss() else EMPTY_CELL
 

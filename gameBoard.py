@@ -1,16 +1,16 @@
-import string
 from cell import Cell
-from helpers import clear_console, index_uppercase
-
 from ship import Ship
-from constant import GRID, EMPTY_CELL
+from ships import Ships
+
+from constant import GRID
+from helpers import index_uppercase
 
 # specialized dictionary with coordinate tuple keys and cell object values
 class GameBoard(dict[(int,int), Cell]):
   def __init__(self):
     super().__init__(self)
     self.build_cells()
-    self.ships: list[Ship] = []
+    self.ships = Ships()
 
   def build_cells(self):
     for row in range(GRID + 1):
@@ -18,16 +18,16 @@ class GameBoard(dict[(int,int), Cell]):
         self[(row, col)] = Cell()
 
   def display(self, for_self):
+    self.populate_ships_in_cells()
     for row in range(0,GRID + 1):
       line = ''
       for col in range(0,GRID + 1):
         line += self._build_header_row(row,col)
         line += self._build_header_col(row,col)
-        line += self._get_cell((row, col), for_self)
+        line += self._get_cell(row, col, for_self)
       print(line)
 
-  def _get_cell(self, coords, for_self):
-    row, col = coords
+  def _get_cell(self, row, col, for_self):
     if row and col: return f' {self[(row,col)].get(for_self)}'
     return ''
   
@@ -37,54 +37,21 @@ class GameBoard(dict[(int,int), Cell]):
     return ''
 
   def _build_header_col(self, row, col):
-    if not col and row: return index_uppercase(row)
-    return ''
-
-
-########### OLD STUFF #############  
-
-  def try_place_ship(self, new_ship: Ship, coords, vertical):
-    new_ship.remove()
-    if self._ship_within_grid(new_ship, coords, vertical) and self._ship_not_overlapping(new_ship,coords,vertical):
-      return True
-    else:
-      return False
-
-  def _ship_within_grid(self, new_ship: Ship, coords, vertical):
-    end_row = coords[0] + new_ship.length - 1
-    end_col = coords[1] + new_ship.length - 1
-
-    if vertical:
-      if end_row > GRID: return False
-    else:
-      if end_col > GRID: return False
-    return True
+    return index_uppercase(row) if not col and row else ''
   
-  def _ship_not_overlapping(self, new_ship: Ship, coords, vertical):
-    self._place_ship(new_ship,coords,vertical)
-
-    for ship in self.ships:
-      if ship != new_ship: 
-        if ship.compare_coords(new_ship):
-          self._remove_ship(new_ship)
-          return False
-    return True
-
-  def _place_ship(self, new_ship: Ship, coords, vertical):
-    new_ship.place(coords, vertical)
-    self.ships.append(new_ship)
-
-  def _remove_ship(self, ship: Ship):
-    self.ships.remove(ship)
-    ship.remove()
+  def populate_ships_in_cells(self):
+    for ship, coords in self.ships.items():
+      for i in range(len(coords)):
+        self[coords[i]].set_ship(ship.sections[i])
 
 
+ship = Ship('Destroyer', 4)
+ship2 = Ship('Cruiser', 3)
 gb = GameBoard()
 
-gb[1,1].set_miss()
-gb[10,7].set_miss()
-gb[4,4].set_hit()
-gb[1,1].set_hit()
-gb[1,2].set_miss()
+gb.ships.try_place_ship(ship, (10,1))
+gb.ships.try_place_ship(ship2, (9,1))
+
+gb.ships.check_for_hit((10,1))
 
 gb.display(True)
