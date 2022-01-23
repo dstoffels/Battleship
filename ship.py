@@ -18,8 +18,8 @@ class Ship:
     self._set_sections()
 
   def is_destroyed(self):
-    for part in self.sections:
-      if part != HIT: return False
+    for section in self.sections:
+      if section != HIT: return False
     return True
 
   def _set_sections(self):

@@ -3,7 +3,7 @@ EMPTY_CELL = '⬜'
 MISS = ' -'
 HIT = ' X'
 
-SHIP_NAMES = {
+SHIPS = {
   'Destroyer': 2,
   'Submarine': 3,
   'Cruiser': 3,

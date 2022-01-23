@@ -51,7 +51,6 @@ gb = GameBoard()
 
 gb.ships.try_place_ship(ship, (10,1))
 gb.ships.try_place_ship(ship2, (9,1))
-
 gb.ships.check_for_hit((10,1))
 
 gb.display(True)

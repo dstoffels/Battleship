@@ -21,7 +21,7 @@ class AI(Player):
     self._place_ships_randomly()
     self._display_place_ship_progress()
     
-    self.board.display_for_self()
+    self.game_board.display_for_self()
     input('press return')
 
   def _display_place_ship_progress(self):

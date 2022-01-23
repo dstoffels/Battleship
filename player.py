@@ -11,7 +11,7 @@ from ship import Ship, init_ships
 class Player:
   def __init__(self):
     self.name = ''
-    self.board = GameBoard()
+    self.game_board = GameBoard()
     self.ships = init_ships()
 
   def setup(self, player_num, player1_name):
@@ -25,7 +25,7 @@ class Player:
     return
 
   def _run_board_setup(self):
-    self.board.display_for_self()
+    self.game_board.display_for_self()
     # FIXME: move to Set_Board class
     while True:
       userInput = validate_int_input(SET_BOARD_MENU)
@@ -34,7 +34,7 @@ class Player:
         case 1: self._place_ships_manually()
         case 2:
           self._place_ships_randomly()
-          self.board.display_for_self()
+          self.game_board.display_for_self()
         case 3: pass # move ship (select ship menu)
         case 4: pass # clear board (need method)
         case 5: return True
@@ -54,23 +54,23 @@ class Player:
     while not successfully_placed:
       clear_console()
       orientation = 'Vertical' if vertical else 'Horizontal'
-      self.board.display_for_self()
+      self.game_board.display_for_self()
       print(f'Placing {ship.name}')
 
       userInput = validate_int_input(prompt)
       match userInput:
         case 1: 
           coords = (10, 10)
-          while not self.board.try_place_ship(ship,coords,vertical):
+          while not self.game_board.try_place_ship(ship,coords,vertical):
             coords = self.get_coords_from_user()
             print('Invalid placement!: ')
         case 2:
           vertical = not vertical
-          if not self.board.try_place_ship(ship,coords,vertical):
+          if not self.game_board.try_place_ship(ship,coords,vertical):
             print('Invalid placement!: ')
             vertical = True
         case 3:
-          if self.board.try_place_ship(ship, coords, vertical):
+          if self.game_board.try_place_ship(ship, coords, vertical):
             successfully_placed = True
 
   def _place_ships_randomly(self):
@@ -79,7 +79,7 @@ class Player:
       while not successfully_placed:
         coords = self._rand_cell()
         vertical = self._rand_bool()
-        successfully_placed = self.board.try_place_ship(ship, coords, vertical)
+        successfully_placed = self.game_board.try_place_ship(ship, coords, vertical)
 
   def get_coords_from_user(self):
     row = self._get_row_from_user()
