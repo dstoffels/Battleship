@@ -1,14 +1,20 @@
+from boardSetupMenu import BoardSetupMenu
 from player import Player
+import coords
 
 class Human(Player):
-  def __init__(self):
-      super().__init__()
 
-  def set_name(self, player_num, player1_name):
-    prompt = f'Enter a name for player {player_num}: '
-    self.name = player1_name
-    while self.name == player1_name:
+  def select_target(self):
+    self.opponent.game_board.display(False)
+    self.game_board.display()
+    return coords.get_from_user()
+
+  def _setup_game_board(self):
+    BoardSetupMenu(self)
+    
+  def _set_name(self):
+    prompt = f'Enter a name for player {self.player_num}: '
+    while self.name == '':
       name = input(prompt)
-      if name == '': continue
-      elif str.lower(name) == str.lower(player1_name): prompt = 'Player names cannot be the same! Enter a different name: '
+      if str.lower(name) == str.lower(self.opponent.name): prompt = 'Player names cannot be the same! Enter a different name: '
       else: self.name = name

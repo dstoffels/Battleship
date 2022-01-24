@@ -1,10 +1,6 @@
-import random
-
-from player import Player
 from gameBoard import GameBoard
 from placeShipMenu import PlaceShipMenu
 
-from constant import GRID
 from helpers import clear_console, validate_int_input
 
 class BoardSetupMenu:
@@ -28,7 +24,7 @@ class BoardSetupMenu:
           PlaceShipMenu(self.player, ships[response - 1])
           prompt = self._prompt_builder()
         case 6: 
-          self._place_ships_randomly()
+          self.player.place_ships_randomly()
           prompt = self._prompt_builder()
         case 7: 
           if len(self.game_board.ships) == len(self.player.ships): self.is_done = True
@@ -47,23 +43,3 @@ class BoardSetupMenu:
     if len(game_board_ships) == len(ships):
       prompt += '7) Ready for battle!\n'
     return prompt
-    
-  def _place_ships_randomly(self):
-    self.game_board.clear_ships()
-
-    for ship in self.player.ships:
-      successfully_placed = False
-      while not successfully_placed:
-        coords = self._rand_cell()
-        ship.random_orientation()
-        successfully_placed = self.game_board.ships.try_place_ship(ship, coords)
-  
-  def _rand_cell(self):
-    row = random.randint(1, GRID)
-    col = random.randint(1, GRID)
-    return (row, col)
-
-  
-        
-p = Player()
-m = BoardSetupMenu(p)

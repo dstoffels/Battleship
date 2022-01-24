@@ -1,27 +1,31 @@
 import random
 import time
 
-from constant import AI_NAMES, GRID
-from helpers import clear_console, index_len
+import coords
+from constant import AI_NAMES
+from helpers import clear_console
 
 from player import Player
 
 class AI(Player):
-  def __init__(self):
-    super().__init__()
 
-  def set_name(self, player_num, player1_name):
-    # ensure player & ai don't share the same name
-    self.name = player1_name
-    while self.name == player1_name:
-      i = random.randint(0, index_len(AI_NAMES))
-      self.name = AI_NAMES[i]
+  # TODO: make AI smarter by detecting hits and targeting nearby
+  def select_target(self):
+      return coords.random_coords()
+
+  def _setup_game_board(self):
+    self.place_ships_randomly()
+
+  # ensure player & ai don't share the same name
+  def _set_name(self):
+    while self.name == '':
+      name = random.choice(AI_NAMES)
+      if name != self.opponent.name:
+        self.name = name
   
   def place_ships(self):
-    self._place_ships_randomly()
+    self.place_ships_randomly()
     self._display_place_ship_progress()
-    
-    self.game_board.display_for_self()
     input('press return')
 
   def _display_place_ship_progress(self):
