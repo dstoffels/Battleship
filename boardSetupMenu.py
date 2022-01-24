@@ -5,7 +5,7 @@ from gameBoard import GameBoard
 from placeShipMenu import PlaceShipMenu
 
 from constant import GRID
-from helpers import validate_int_input
+from helpers import clear_console, validate_int_input
 
 class BoardSetupMenu:
   def __init__(self, player):
@@ -19,6 +19,7 @@ class BoardSetupMenu:
     prompt = self._prompt_builder()
 
     while not self.is_done:
+      clear_console()
       self.game_board.display()
       response = validate_int_input(prompt)
 

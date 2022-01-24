@@ -12,39 +12,40 @@ class PlaceShipMenu:
     self.ship = ship
     self.game_board: GameBoard = player.game_board
     self.ships: Ships = self.game_board.ships
+    self.done = False
     self.run()
 
   def run(self):
+    coords = self._select_coords()
     prompt = f'''
 Placing {self.ship.name}
-
-1) Select coordinates
-2) Rotate {self.ship.name}
-3) Confirm placement
+  1) Select coordinates
+  2) Rotate {self.ship.name}
+  3) Confirm placement
 '''
-    successfully_placed = False
-    coords = (GRID, GRID)
-
-    while not successfully_placed:
+    while not self.done:
       clear_console()
       self.game_board.build_cells()
       self.game_board.display()
 
       userInput = validate_int_input(prompt)
       match userInput:
-        case 1: # select coordinates
-          coords = (GRID, GRID)
-          while not self.ships.try_place_ship(self.ship, coords):
-            coords = self.get_coords_from_user()
-            print('Invalid placement!: ')
-        case 2: # rotate ship
-          self.ship.flip_orientation()
-          if not self.ships.try_place_ship(self.ship, coords):
-            print('Invalid placement!: ')
-            self.ship.flip_orientation()
-        case 3: # confirm placement
-          if self.ships.try_place_ship(self.ship, coords):
-            successfully_placed = True
+        case 1: coords = self._select_coords()
+        case 2: self._rotate_ship(coords)
+        case 3: self.done = True
+
+  def _select_coords(self):
+    successfully_placed = False
+    while not successfully_placed:
+      coords = self.get_coords_from_user()
+      successfully_placed = self.ships.try_place_ship(self.ship, coords)
+    return coords
+
+  def _rotate_ship(self, coords):
+    successfully_placed = False
+    while not successfully_placed:
+      self.ship.flip_orientation()
+      successfully_placed = self.ships.try_place_ship(self.ship, coords)    
 
   def get_coords_from_user(self):
     row = self._get_row_from_user()

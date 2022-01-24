@@ -17,19 +17,11 @@ class Player:
 
   def setup(self, player_num, player1_name):
     self.set_name(player_num, player1_name)
-    # boardSetupMenu
+    self.setup_game_board()
 
   def set_name(self): pass
 
-  def place_ship(self, ship):
-    pass
-
-  # def place_ships(self):
-  #   if self._run_board_setup(): print('game on')
-  #   return
-
-  # FIXME: move to place_ships_menu class
-  # def _run_manual_menu(self, ship: Ship):
+  def setup_game_board(self): pass
     
 
   
