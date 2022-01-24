@@ -43,11 +43,6 @@ SET_BOARD_MENU = '''
 
 Choose an option: '''
 
-MANUAL_PLACE_MENU = '''1) Select coordinates
-2) Flip Orientation
-3) Confirm placement
-'''
-
 AI_NAMES = [
   "Cap'm Jack Sparrah",
   "Admiral Ackbar",

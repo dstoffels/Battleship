@@ -14,8 +14,6 @@ class Battle:
     self.player1.setup()
     self.player2.setup()
 
-  
-
 class Hot_Seat_Battle(Battle):
   def __init__(self) :
     self.player1 = Human()

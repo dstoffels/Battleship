@@ -12,13 +12,13 @@ class GameBoard(dict[(int,int), Cell]):
     self.build_cells()
     self.ships = Ships()
 
-  def build_cells(self):
-    for row in range(GRID + 1):
-      for col in range(GRID + 1):
-        self[(row, col)] = Cell()
+  def place_ship(self, ship):
+    # prompt for ship placement: prompt for row, prompt for col, rotate
 
-  def display(self, for_self):
-    self.populate_ships_in_cells()
+    self.ships.try_place_ship(ship, )
+
+  def display(self, for_self=True):
+    self._populate_ships_in_cells()
     for row in range(0,GRID + 1):
       line = ''
       for col in range(0,GRID + 1):
@@ -27,10 +27,11 @@ class GameBoard(dict[(int,int), Cell]):
         line += self._get_cell(row, col, for_self)
       print(line)
 
-  def _get_cell(self, row, col, for_self):
-    if row and col: return f' {self[(row,col)].get(for_self)}'
-    return ''
-  
+  def _populate_ships_in_cells(self):
+    for ship, coords in self.ships.items():
+      for i in range(len(coords)):
+        self[coords[i]].set_ship(ship.sections[i])
+
   def _build_header_row(self, row, col):
     if not row and not col: return '  '
     if not row: return f' {col} ' if col < 10 else f'{col} '
@@ -39,18 +40,25 @@ class GameBoard(dict[(int,int), Cell]):
   def _build_header_col(self, row, col):
     return index_uppercase(row) if not col and row else ''
   
-  def populate_ships_in_cells(self):
-    for ship, coords in self.ships.items():
-      for i in range(len(coords)):
-        self[coords[i]].set_ship(ship.sections[i])
+  def _get_cell(self, row, col, for_self):
+    if row and col: return f' {self[(row,col)].get(for_self)}'
+    return ''
 
+  def build_cells(self):
+    for row in range(GRID + 1):
+      for col in range(GRID + 1):
+        self[(row, col)] = Cell()
 
-ship = Ship('Destroyer', 4)
-ship2 = Ship('Cruiser', 3)
-gb = GameBoard()
+  def clear_ships(self):
+    self.ships = Ships()
+    self.build_cells()
 
-gb.ships.try_place_ship(ship, (10,1))
-gb.ships.try_place_ship(ship2, (9,1))
-gb.ships.check_for_hit((10,1))
+# ship = Ship('Destroyer', 4)
+# ship2 = Ship('Cruiser', 3)
+# gb = GameBoard()
 
-gb.display(True)
+# gb.ships.try_place_ship(ship, (10,1))
+# gb.ships.try_place_ship(ship2, (9,1))
+# gb.ships.check_for_hit((10,1))
+
+# gb.display(True)

@@ -1,7 +1,13 @@
-from constant import GRID
+from constant import GRID, SHIPS
 from ship import Ship
 
 class Ships(dict[Ship, list[tuple[int,int]]]):
+
+  def init_ships():
+    player_ships: list[Ship] = []
+    for name, length in SHIPS.items():
+      player_ships.append(Ship(name,length))
+    return player_ships
 
   def check_for_hit(self, target_coords):
     for ship, coords in self.items():

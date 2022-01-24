@@ -1,3 +1,4 @@
+import random
 from constant import BOW, HIT, HULL, SHIP_HORZ, SHIP_VERT, STERN
 
 class Ship:
@@ -30,5 +31,12 @@ class Ship:
         self.sections[i] = SHIP_VERT[STERN] if self.is_vertical else SHIP_HORZ[STERN]
       else: 
         self.sections[i] = SHIP_VERT[HULL] if self.is_vertical else SHIP_HORZ[HULL]
+
+  def random_orientation(self):
+    self.is_vertical = self._rand_bool()
+    self._set_sections()
+  
+  def _rand_bool(self):
+    return random.choice([True, False])
   
   def __str__(self): return self.name
